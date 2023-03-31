@@ -8,14 +8,14 @@ vector<Token> DFA::getTokensFromString(const std::string& mathString) const
 	vector<Token> tokens;
 	State currentState = mStart;
 	State previousState;
-	char currentChar;
+	short currentChar;
 	int curColumn = 0;
 	string lexem;
 	auto getNextChar = [&]() {
 		if (curColumn < mathString.size())
 			currentChar = mathString[curColumn];
 		else
-			currentChar = -1;
+			currentChar = -200;
 		curColumn += 1;
 	};
 	auto getTypeOfLexem = [&](const string& lxm) {
@@ -29,18 +29,16 @@ vector<Token> DFA::getTokensFromString(const std::string& mathString) const
 		}
 		return std::string("integer");
 	};
-	while (currentState != State::ENDOFFILE) {
+	while (currentState!=State::ENDOFFILE) {
 		previousState = currentState;
 		getNextChar();
-		if (currentChar > 0) {
+		if (currentChar>=-128 && currentChar<=127) {
 			currentState = mRules.at(currentState).at(currentChar);
 		}
 		else {
 			currentState = State::ENDOFFILE;
 		}
-
-		if ((currentState != previousState || currentState == State::SYMBOLS)
-			&& !lexem.empty())
+		if ((currentState != previousState || currentState == State::SYMBOLS) && !lexem.empty() && currentState!=State::ERROR)
 		{
 			string typeOfLexem = getTypeOfLexem(lexem);
 			tokens.push_back(Token(lexem, typeOfLexem, 0, curColumn));
@@ -53,15 +51,22 @@ vector<Token> DFA::getTokensFromString(const std::string& mathString) const
 		if (currentState == State::ERROR)
 		{
 			lexem.clear();
+			string errorType;
 			switch (previousState) {
 			case State::IDENTIFIER:
+				errorType = "Error while identifying identifier at pos ";
+				break;
+			case State::NUMBER:
+				errorType = "Error while identifying number at pos ";
 				break;
 			case State::NONE:
 			case State::SYMBOLS:
+			default:
+				errorType = "Error: unknown symbol at pos ";
 				break;
 			}
-			tokens.push_back(Token("ERROR", "ERROR TYPE", 0, curColumn));
-			break;
+			tokens.push_back(Token("ERROR", errorType, 0, curColumn));
+			return tokens;
 		}
 	}
 	Token endOfFile("EOF", "EOF", 0, ++curColumn);
