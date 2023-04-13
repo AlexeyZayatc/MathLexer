@@ -22,7 +22,7 @@ vector<Token> DFA::getTokensFromString(const std::string& mathString) const
 		if (lxm.size() == 1 && (symbols.contains(lxm[0])))
 			return symbols.at(lxm[0]);
 		else {
-			if ((lxm[0] >= 'a' && lxm[0] <= 'z') || (lxm[0] >= 'A' && lxm[0] <= 'Z'))
+			if ((lxm[0] >= 'a' && lxm[0] <= 'z') || (lxm[0] >= 'A' && lxm[0] <= 'Z') || lxm[0]=='_')
 				return std::string("Identifier");
 			if (lxm.find('.') != string::npos)
 				return std::string("float");

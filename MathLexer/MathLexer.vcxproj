@@ -130,10 +130,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DFA.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DFA.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Token.cpp" />
   </ItemGroup>

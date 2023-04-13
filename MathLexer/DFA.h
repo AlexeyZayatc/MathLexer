@@ -21,7 +21,6 @@ static const map<char, std::string> symbols = {
 	{'-',"MINUS"},
 	{'*',"MULTIPLY"},
 	{'/',"DIVISION"},
-	{'%',"REMAINDER"},
 	{'(',"LRBRACKET"},
 	{')',"RRBRACKET"},
 	{'.', "DECIMALPOINT"},
